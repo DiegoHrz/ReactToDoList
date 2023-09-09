@@ -3,13 +3,21 @@ import "./App.css";
 
 function App() {
   //Any type of data you want to have re-render your component when it changes to make the changes take effect you want to put those inside useState
-  //you cant modify a variable inside a hook 
+  //you cant modify a variable inside a hook. its inmutable thats why you need to create a new state object ( ...state)
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
   //in this way the page wont reload every time you clic submit
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    setTodos((currentTodos) => {
+      return [
+        ...currentTodos,
+        { id: crypto.randomUUID(), title: newTodo, completed: false },
+      ];
+    });
+    setNewTodo('')
   };
 
   // const handleEvent = (e) => {
@@ -25,9 +33,7 @@ function App() {
             type="text"
             id="text"
             value={newTodo}
-            onChange={(e) => {
-              setNewTodo(e.target.value);
-            }}
+            onChange={(e) => setNewTodo(e.target.value)}
           />
         </div>
         <div>
@@ -36,20 +42,17 @@ function App() {
         <div>
           <h1>ToDo List</h1>
           <ul>
-            <li>
-              <label>
-                <input type="checkbox" name="" id="" />
-                {newTodo}
-              </label>
-              <button>Delete</button>
-            </li>
-            <li>
-              <label>
-                <input type="checkbox" name="" id="" />
-                Item 1
-              </label>
-              <button>Delete</button>
-            </li>
+            {todos.map((todo) => {
+              return (
+                <li key={todo.id} > 
+                  <label id={todo.id}>
+                    <input type="checkbox" checked={  todo.completed} />
+                    {todo.title}
+                  </label>
+                  <button>Delete</button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </form>
