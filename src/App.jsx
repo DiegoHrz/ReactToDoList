@@ -17,12 +17,23 @@ function App() {
         { id: crypto.randomUUID(), title: newTodo, completed: false },
       ];
     });
-    setNewTodo('')
+    setNewTodo("");
   };
 
   // const handleEvent = (e) => {
   //   setNewTodo(e.target.value)
   // }
+
+  const toggleTodo = (id, completed) => {
+    setTodos((currentTodos) => {
+      return currentTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed };
+        }
+        return todo;
+      });
+    });
+  };
 
   return (
     <>
@@ -44,9 +55,13 @@ function App() {
           <ul>
             {todos.map((todo) => {
               return (
-                <li key={todo.id} > 
+                <li key={todo.id}>
                   <label id={todo.id}>
-                    <input type="checkbox" checked={  todo.completed} />
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={(e) => toggleTodo(todo.id, e.target.checked)}
+                    />
                     {todo.title}
                   </label>
                   <button>Delete</button>
